@@ -4,6 +4,9 @@ class User < ApplicationRecord
   belongs_to :referred_by, class_name: 'User', optional: true
   has_many :referred_users, class_name: 'User', foreign_key: :referred_by_id
 
+  has_many :notifications, as: :recipient
+  has_many :notification_subjects, as: :notifiable
+
   validates :referral_code, uniqueness: true
 
   before_create do
