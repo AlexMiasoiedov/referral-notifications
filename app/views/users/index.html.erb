@@ -1,0 +1,7 @@
+<h3>Users</h3>
+
+<%- @users.each do |u| %>
+  <p><%= link_to u.email, user_path(u.id) %> <%= follow_user_button(u) %></p>
+<% end %>
+
+<%= paginate @users %>

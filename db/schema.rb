@@ -10,10 +10,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190310172459) do
+ActiveRecord::Schema.define(version: 20190324122247) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "events", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "eventable_id"
+    t.string "eventable_type"
+    t.string "action"
+    t.jsonb "data", default: "{}"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["action"], name: "index_events_on_action"
+    t.index ["data"], name: "index_events_on_data", using: :gin
+    t.index ["eventable_id", "eventable_type"], name: "index_events_on_eventable_id_and_eventable_type"
+    t.index ["user_id"], name: "index_events_on_user_id"
+  end
 
   create_table "notifications", force: :cascade do |t|
-    t.integer "user_id"
+    t.bigint "user_id"
     t.integer "recipient_id"
     t.string "action"
     t.string "notifiable_type"
@@ -21,6 +38,19 @@ ActiveRecord::Schema.define(version: 20190310172459) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_notifications_on_user_id"
+  end
+
+  create_table "services", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "provider"
+    t.string "uid"
+    t.string "access_token_secret"
+    t.string "refresh_token"
+    t.datetime "expires_at"
+    t.text "auth"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_services_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -37,4 +67,6 @@ ActiveRecord::Schema.define(version: 20190310172459) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "notifications", "users"
+  add_foreign_key "services", "users"
 end
