@@ -1,15 +1,17 @@
 class Event::FollowJob < ApplicationJob
   queue_as :default
 
-  def perform(follower, following)
+  def perform(follow_id)
+    follow = Follow.find(follow_id)
+
     event_params = {
-      user_id: follower.id,
-      eventable_id: following.id,
-      eventable_type: following.class,
-      action: 'follow',
+      user_id: follow.follower.id,
+      eventable_id: follow.id,
+      eventable_type: follow.class,
+      action: follow.status,
       data: {
-        follower_email: follower.email,
-        following_email: following.email
+        follower_email: follow.follower.email,
+        following_email: follow.following.email
       }
     }
 

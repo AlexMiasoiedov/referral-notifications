@@ -6,5 +6,6 @@ Rails.application.routes.draw do
     get '/', to: 'users#index', as: :users
     get '/:id', to: 'users#show', as: :user
     post '/:id/follow', to: 'users#follow', as: :follow_user
+    post '/:id/unfollow', to: 'users#unfollow', as: :unfollow_user
   end
 end

@@ -20,6 +20,10 @@ class User < ApplicationRecord
   has_many :services
   has_many :event_participations, as: :eventable
   has_many :events
+  has_many :followings, class_name: 'Follow', foreign_key: :follower_id
+  has_many :followers,  class_name: 'Follow', foreign_key: :following_id
+  has_many :following_users, through: :followings
+  has_many :follower_users, through: :followers
   # ASSOCIATIONS:
   ###############
 

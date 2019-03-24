@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190324122247) do
+ActiveRecord::Schema.define(version: 20190324210255) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,6 +27,16 @@ ActiveRecord::Schema.define(version: 20190324122247) do
     t.index ["data"], name: "index_events_on_data", using: :gin
     t.index ["eventable_id", "eventable_type"], name: "index_events_on_eventable_id_and_eventable_type"
     t.index ["user_id"], name: "index_events_on_user_id"
+  end
+
+  create_table "follows", force: :cascade do |t|
+    t.integer "follower_id"
+    t.integer "following_id"
+    t.jsonb "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "status", default: "follow"
+    t.index ["follower_id", "following_id"], name: "index_follows_on_follower_id_and_following_id"
   end
 
   create_table "notifications", force: :cascade do |t|
